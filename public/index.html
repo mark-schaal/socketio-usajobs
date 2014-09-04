@@ -1,23 +1,51 @@
 <!doctype html>
 <html>
 <head>
-	<title>Socket.IO Hello World</title>
+	<title>Socket.IO - USAJobs Search</title>
 	<style>
 	* { margin: 0; padding: 0; box-sizing: border-box; }
-	body { font: 13px Helvetica, Arial; }
-	form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-	form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-	form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-	#messages { list-style-type: none; margin: 0; padding: 0; }
-	#messages li { padding: 5px 10px; }
-	#messages li:nth-child(odd) { background: #eee; }
+	body { font: 14px Helvetica, Arial; }
+	form { background: #ccc; padding: 10px; position: fixed; top: 0; width: 100%; }
+	form .group{
+		display: inline-block;
+		width: 25%;
+		margin-right: 2%;
+	}
+	form .group#search-keyword{
+		width: 50%;
+	}
+	form .group#search-series{
+		width: 25%;
+	}
+	form .group#form-actions{
+		width: 20%;
+		margin-right: 0;
+	}
+	input, select{
+		display: block;
+		padding: .75em;
+		width: 100%;
+		height: auto;
+	}
 	</style>
 </head>
 <body>
-	<ul id="messages"></ul>
-	<form action="">
-		<input id="m" autocomplete="off" /><button>Send</button>
+	<form action="/" id="usajobs-search" accept-charset="UTF-8">
+		<div id="search-keyword" class="group">
+			<label for="input-keyword">Keyword</label>
+			<input type="text" id="input-keyword" name="Keyword" value="" size="30" maxlength="128" class="form-text"/>
+		</div>
+		<div id="search-series" class="group">
+			<label for="select-series">Job Series</label>
+				<select id="select-series" name="series" class="form-select">
+					<option value="All" selected="selected">- Any -</option>
+				</select>
+		</div>				
+		<div id="form-actions" class="group">
+			<input type="submit" id="search-submit" name="" value="Search" class="">
+		</div>
 	</form>
+	<ul id="search-results"></ul>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
@@ -33,17 +61,20 @@
 			});
 		}
 
-		$('form').submit(function(){
+		$('#input-keyword').on('keyup',function(){
 			//Create an event emission that sends the chat message and then empties the input
-			socket.emit('chat message',$('#m').val());
-			$('#m').val('');
-			console.log(user);
+			socket.emit('job search',$('#input-keyword').val());
 			return false;
 		});
 
-		socket.on('chat message', function(msg){
-			//Everytime chat message emits an event, we retrieve the data from socket.io and add it to the html
-			$('#messages').append($('<li>').text(msg));
+		socket.on('job search', function(search){
+			//$('#search-results').append($('<li>').text(search));
+		});
+
+		socket.on('job search series options',function(results){
+			$(results).each(function(){
+				$('#select-series').append($('<option>').val(this.JobFamily).text(this.Value));
+			});
 		});
 
 	});
