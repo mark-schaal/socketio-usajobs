@@ -1,9 +1,16 @@
-socketio-helloworld
-===================
+socketio-usajobs
+================
 
-Introduction to Node.js and Socket.io for realtime web applications
+Simple USAJobs search interface binding user interactions with search result propagation.
 
-## Requirements
-* **Node.JS**
-* **Socket.IO**
+## Technology Requirements
+* **Node.js**
 * **Express**
+* **Socket.io**
+* 
+
+## Node Package Dependencies
+* **Express**
+* **Socket.io**
+* **Request**
+* **Filestructure (FS)**
