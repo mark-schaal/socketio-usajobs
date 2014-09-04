@@ -49,6 +49,15 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
+	//Helper Functions
+	function SortBySeries(a, b){
+		console.log(a);
+		var aName = a.Value[0].toLowerCase();
+		var bName = b.Value[0].toLowerCase(); 
+		return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+	}
+
+	//Page Initializations
 	$(document).ready(function(){
 		var socket = io();
 		var user = {};
@@ -72,7 +81,8 @@
 		});
 
 		socket.on('job search series options',function(results){
-			$(results).each(function(){
+			var sorted = $(results).sort(SortBySeries); 
+			$(sorted).each(function(){
 				$('#select-series').append($('<option>').val(this.JobFamily).text(this.Value));
 			});
 		});
