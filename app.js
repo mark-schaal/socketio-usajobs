@@ -1,3 +1,7 @@
+//Global Variable Declarations
+var appIndex = __dirname+'/public';
+
+//Middleware
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -5,11 +9,12 @@ var fs = require('fs');
 var request = require('request');
 var xml2js = require('xml2js');
 
+// Reusable middleware declarations
 var parser = new xml2js.Parser(); //Per documentation, only create one parser object per file.
 
 app.get('/', function(req, res){
 	var options = {
-		root: __dirname+'/public',
+		root: appIndex,
 	};
 	res.sendFile('index.html',options);
 });
